@@ -13,8 +13,4 @@ app.use(
 app.use(express.json({ limit: '80kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-app.get('/', (req, res) => {
-    res.send('Hello, this is a protected API!');
-});
-
 export default app;
