@@ -1,6 +1,6 @@
-import { Transaction } from "../models/transaction.model";
-import ResponseData from "../utils/ApiResponse";
-import asyncHandler from "../utils/asyncHandler";
+import { Transaction } from "../models/transaction.model.js";
+import ResponseData from "../utils/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
 export const createTransaction = asyncHandler(async (req, res) => {
     const transactionDetails = await Transaction.create(req.body);
@@ -12,7 +12,7 @@ export const createTransaction = asyncHandler(async (req, res) => {
     })
 })
 
-export const getAllTransactions = asyncHandler(async (req, res) => {
+export const getAllTransactions = asyncHandler(async (_, res) => {
     const transactions = await Transaction.find();
 
     return ResponseData(res, {
@@ -23,7 +23,9 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
 })
 
 export const deleteTransaction = asyncHandler(async (req, res) => {
-    const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+
+    const deletedTransaction = await Transaction.findByIdAndDelete(id);
 
     if (!deletedTransaction) {
         return ResponseData(res, {
@@ -40,7 +42,9 @@ export const deleteTransaction = asyncHandler(async (req, res) => {
 })
 
 export const updateTransaction = asyncHandler(async (req, res) => {
-    const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { id } = req.params;
+
+    const updatedTransaction = await Transaction.findByIdAndUpdate(id, req.body, { new: true });
 
     if (!updatedTransaction) {
         return ResponseData(res, {
