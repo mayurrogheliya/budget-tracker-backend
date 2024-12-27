@@ -59,3 +59,53 @@ export const updateTransaction = asyncHandler(async (req, res) => {
         message: "Transaction updated successfully",
     })
 })
+
+export const getAnalytics = asyncHandler(async (req, res) => {
+    const transaction = await Transaction.find();
+
+    const incomeTransactions = transaction.filter((transaction) => transaction.type === 'Income');
+    const expenseTransactions = transaction.filter((transaction) => transaction.type === 'Expense');
+
+    const totalIncome = incomeTransactions.reduce((total, transaction) => total + transaction.amount, 0);
+    const totalExpense = expenseTransactions.reduce((total, transaction) => total + transaction.amount, 0);
+
+    const netAmount = totalIncome - totalExpense;
+
+    const nameIncomeData = [];
+    const nameExpenseData = [];
+
+    incomeTransactions.forEach(transaction => {
+        nameIncomeData.push(transaction.description);
+    })
+
+    expenseTransactions.forEach(transaction => {
+        nameExpenseData.push(transaction.description);
+    })
+
+    const sepIncomeData = [];
+    const sepExpenseData = [];
+
+    incomeTransactions.forEach(transaction => {
+        sepIncomeData.push(transaction.amount);
+    });
+
+    expenseTransactions.forEach(transaction => {
+        sepExpenseData.push(transaction.amount);
+    });
+
+    const analyticsData = {
+        sepIncomeData,
+        sepExpenseData,
+        nameIncomeData,
+        nameExpenseData,
+        totalIncome,
+        totalExpense,
+        netAmount,
+    }
+
+    return ResponseData(res, {
+        statusCode: 200,
+        data: analyticsData,
+        message: "Analytics retrieved successfully",
+    })
+})
