@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/", getAllTransactions);
 router.post("/", createTransaction);
-router.put("/:id", updateTransaction);
-router.delete("/:id", deleteTransaction);
+router.put("/:_id", updateTransaction);
+router.delete("/:_id", deleteTransaction);
 
 export default router;

@@ -12,7 +12,7 @@ export const createTransaction = asyncHandler(async (req, res) => {
     })
 })
 
-export const getAllTransactions = asyncHandler(async (_, res) => {
+export const getAllTransactions = asyncHandler(async (req, res) => {
     const transactions = await Transaction.find();
 
     return ResponseData(res, {
@@ -23,9 +23,9 @@ export const getAllTransactions = asyncHandler(async (_, res) => {
 })
 
 export const deleteTransaction = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { _id } = req.params;
 
-    const deletedTransaction = await Transaction.findByIdAndDelete(id);
+    const deletedTransaction = await Transaction.findByIdAndDelete(_id);
 
     if (!deletedTransaction) {
         return ResponseData(res, {
@@ -42,9 +42,9 @@ export const deleteTransaction = asyncHandler(async (req, res) => {
 })
 
 export const updateTransaction = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { _id } = req.params;
 
-    const updatedTransaction = await Transaction.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedTransaction = await Transaction.findByIdAndUpdate(_id, req.body, { new: true });
 
     if (!updatedTransaction) {
         return ResponseData(res, {
