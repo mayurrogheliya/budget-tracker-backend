@@ -13,7 +13,16 @@ export const createTransaction = asyncHandler(async (req, res) => {
 })
 
 export const getAllTransactions = asyncHandler(async (req, res) => {
-    const transactions = await Transaction.find();
+    let { search } = req.query;
+
+    const searchTransactions = search ? {
+        $or: [
+            { type: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } },
+        ],
+    } : {};
+
+    const transactions = await Transaction.find(searchTransactions);
 
     return ResponseData(res, {
         statusCode: 200,
