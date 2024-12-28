@@ -16,4 +16,8 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 app.use('/api/v1', routes);
 
+app.get("/", (req, res) => {
+    res.send("Hello from budget tracker!");
+});
+
 export default app;
