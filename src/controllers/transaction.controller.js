@@ -7,7 +7,7 @@ export const createTransaction = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        data: transactionDetails,
+        transaction: transactionDetails,
         message: "Transaction created successfully",
     })
 })
@@ -26,7 +26,7 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        data: transactions,
+        transaction: transactions,
         message: "All transactions retrieved successfully",
     })
 })
@@ -45,7 +45,7 @@ export const deleteTransaction = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        data: deletedTransaction,
+        transaction: deletedTransaction,
         message: "Transaction deleted successfully",
     })
 })
@@ -64,7 +64,7 @@ export const updateTransaction = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        data: updatedTransaction,
+        transaction: updatedTransaction,
         message: "Transaction updated successfully",
     })
 })
@@ -114,7 +114,7 @@ export const getAnalytics = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        data: analyticsData,
+        transaction: analyticsData,
         message: "Analytics retrieved successfully",
     })
 })
