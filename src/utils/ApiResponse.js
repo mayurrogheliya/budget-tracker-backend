@@ -1,8 +1,8 @@
-const ResponseData = (res, { statusCode, status = "success", data, message }) => {
+const ResponseData = (res, { statusCode, status = "success", transaction, message }) => {
     const response = {
         status,
         message,
-        data
+        transaction
     }
 
     return res.status(statusCode).json(response);
