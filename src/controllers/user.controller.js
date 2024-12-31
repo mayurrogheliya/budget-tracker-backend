@@ -25,3 +25,76 @@ export const createUser = asyncHandler(async (req, res) => {
         message: "User created successfully",
     });
 })
+
+const generateTokens = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+
+        const refreshToken = await user.generateRefreshToken();
+        const accessToken = await user.generateAccessToken();
+
+        user.refreshToken = refreshToken;
+
+        await user.save({ validateBeforeSave: false });
+
+        return { accessToken, refreshToken };
+    } catch (error) {
+        return ResponseData(response, {
+            statusCode: 500,
+            message: "Error generating tokens",
+        })
+    }
+}
+
+export const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user || !(await user.verifyPassword(password))) {
+        return ResponseData(res, {
+            statusCode: 400,
+            message: "Invalid email or password",
+        })
+    }
+
+    const { accessToken, refreshToken } = await generateTokens(user._id);
+
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 1000,
+        sameSite: "Strict",
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: "Strict",
+    });
+
+    return ResponseData(res, {
+        statusCode: 200,
+        transaction: { user, accessToken, refreshToken },
+        message: "User logged in successfully",
+    });
+
+})
+
+export const logoutUser = asyncHandler(async (req, res) => {
+
+    res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
+    res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        { refreshToken: unde },
+        { new: true }
+    )
+
+    return ResponseData(res, {
+        statusCode: 200,
+        message: "User logged out successfully",
+    });
+})
