@@ -19,9 +19,9 @@ export const createUser = asyncHandler(async (req, res) => {
 
     const user = await User.create({ ...req.body });
 
-    return ResponseData(res, {
+    return Responsedata(res, {
         statusCode: 201,
-        transaction: user,
+        data: user,
         message: "User created successfully",
     });
 })
@@ -76,7 +76,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        transaction: { user, accessToken, refreshToken },
+        data: { user, accessToken, refreshToken },
         message: "User logged in successfully",
     });
 
