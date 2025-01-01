@@ -5,7 +5,6 @@ import asyncHandler from "../utils/asyncHandler.js";
 const authenticateUser = asyncHandler(async (req, res, next) => {
     try {
         const token = await req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-        console.log(token);
 
         if (!token) {
             return ResponseData(res, {
@@ -20,7 +19,7 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
                 return ResponseData(res, {
                     statusCode: 401,
                     status: "error",
-                    message: "Invalid token",
+                    message: "Please login again.",
                 });
             }
             req.user = user;
