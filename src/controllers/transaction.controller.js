@@ -3,7 +3,8 @@ import ResponseData from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 export const createTransaction = asyncHandler(async (req, res) => {
-    const transactionDetails = await Transaction.create(req.body);
+
+    const transactionDetails = await Transaction.create({ ...req.body, user: req.user._id });
 
     return ResponseData(res, {
         statusCode: 200,
@@ -22,7 +23,7 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
         ],
     } : {};
 
-    const transactions = await Transaction.find(searchTransactions);
+    const transactions = await Transaction.find({ user: req.user._id }, searchTransactions);
 
     return ResponseData(res, {
         statusCode: 200,
@@ -34,7 +35,7 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
 export const deleteTransaction = asyncHandler(async (req, res) => {
     const { _id } = req.params;
 
-    const deletedTransaction = await Transaction.findByIdAndDelete(_id);
+    const deletedTransaction = await Transaction.findOneAndDelete({ _id, user: req.user._id });
 
     if (!deletedTransaction) {
         return ResponseData(res, {
@@ -53,14 +54,23 @@ export const deleteTransaction = asyncHandler(async (req, res) => {
 export const updateTransaction = asyncHandler(async (req, res) => {
     const { _id } = req.params;
 
-    const updatedTransaction = await Transaction.findByIdAndUpdate(_id, req.body, { new: true });
+    const transaction = await Transaction.findById(_id);
 
-    if (!updatedTransaction) {
+    if (!transaction) {
         return ResponseData(res, {
             statusCode: 404,
             message: "Transaction not found",
         })
     }
+
+    if (transaction.user.toString() !== req.user._id.toString()) {
+        return ResponseData(res, {
+            statusCode: 403,
+            message: "Unauthorized to update this transaction",
+        })
+    }
+
+    const updatedTransaction = await Transaction.findByIdAndUpdate(_id, req.body, { new: true });
 
     return ResponseData(res, {
         statusCode: 200,
@@ -70,7 +80,7 @@ export const updateTransaction = asyncHandler(async (req, res) => {
 })
 
 export const getAnalytics = asyncHandler(async (req, res) => {
-    const transaction = await Transaction.find();
+    const transaction = await Transaction.find({ user: req.user._id });
 
     const incomeTransactions = transaction.filter((transaction) => transaction.type === 'Income');
     const expenseTransactions = transaction.filter((transaction) => transaction.type === 'Expense');
