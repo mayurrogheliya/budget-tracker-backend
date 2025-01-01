@@ -19,7 +19,7 @@ export const createUser = asyncHandler(async (req, res) => {
 
     const user = await User.create({ ...req.body });
 
-    return Responsedata(res, {
+    return ResponseData(res, {
         statusCode: 201,
         data: user,
         message: "User created successfully",
@@ -76,7 +76,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     return ResponseData(res, {
         statusCode: 200,
-        data: { user, accessToken, refreshToken },
+        data: user,
         message: "User logged in successfully",
     });
 
@@ -89,7 +89,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
     await User.findByIdAndUpdate(
         req.user._id,
-        { refreshToken: unde },
+        { refreshToken: undefined },
         { new: true }
     )
 
