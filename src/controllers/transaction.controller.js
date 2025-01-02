@@ -23,7 +23,7 @@ export const getAllTransactions = asyncHandler(async (req, res) => {
         ],
     } : {};
 
-    const transactions = await Transaction.find({ user: req.user._id }, searchTransactions);
+    const transactions = await Transaction.find({ user: req.user._id, ...searchTransactions });
 
     return ResponseData(res, {
         statusCode: 200,
