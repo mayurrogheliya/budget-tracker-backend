@@ -34,6 +34,7 @@ const generateTokens = async (userId) => {
         const accessToken = await user.generateAccessToken();
 
         user.refreshToken = refreshToken;
+        user.accessToken = accessToken;
 
         await user.save({ validateBeforeSave: false });
 
