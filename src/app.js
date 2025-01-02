@@ -2,13 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes/index.routes.js'
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 const app = express();
 
 app.use(
     cors({
-        origin: "*",
-        methods: ['GET', 'POST', 'PUT', 'DELETE']
+        origin: process.env.USER_URL,
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true,
     })
 )
 
