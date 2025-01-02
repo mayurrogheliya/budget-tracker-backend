@@ -85,14 +85,17 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 export const logoutUser = asyncHandler(async (req, res) => {
 
+    
     res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
     res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
-
-    await User.findByIdAndUpdate(
-        req.user._id,
-        { refreshToken: undefined },
-        { new: true }
-    )
+    
+    if (req.user?._id) {
+        await User.findByIdAndUpdate(
+            req.user._id,
+            { $set: { refreshToken: null } },
+            { new: true }
+        )
+    }
 
     return ResponseData(res, {
         statusCode: 200,
