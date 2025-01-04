@@ -75,9 +75,11 @@ export const loginUser = asyncHandler(async (req, res) => {
         sameSite: "Strict",
     });
 
+    const loginDatails = await User.findOne({ email });
+
     return ResponseData(res, {
         statusCode: 200,
-        data: user,
+        data: loginDatails,
         message: "User logged in successfully",
     });
 
@@ -85,10 +87,10 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 export const logoutUser = asyncHandler(async (req, res) => {
 
-    
+
     res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
     res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
-    
+
     if (req.user?._id) {
         await User.findByIdAndUpdate(
             req.user._id,
