@@ -11,7 +11,7 @@ export const createUser = asyncHandler(async (req, res) => {
     })
 
     if (existUser) {
-        return ResponseData(response, {
+        return ResponseData(res, {
             statusCode: 400,
             message: "Email already exists",
         })
@@ -22,7 +22,7 @@ export const createUser = asyncHandler(async (req, res) => {
     return ResponseData(res, {
         statusCode: 201,
         data: user,
-        message: "User created successfully",
+        message: "Registered successfully",
     });
 })
 
