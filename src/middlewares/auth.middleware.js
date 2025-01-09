@@ -16,6 +16,8 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
 
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
+                res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
+                res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'Strict' });
                 return ResponseData(res, {
                     statusCode: 401,
                     status: "error",
