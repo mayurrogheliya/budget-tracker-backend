@@ -20,6 +20,10 @@ const userSchema = new Schema(
             type: Boolean,
             default: true,
         },
+        verified: {
+            type: Boolean,
+            default: false,
+        },
         refreshToken: {
             type: String,
         },
@@ -45,6 +49,10 @@ userSchema.methods.generateAccessToken = async function () {
 
 userSchema.methods.generateRefreshToken = async function () {
     return jwt.sign({ _id: this._id, email: this.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY })
+}
+
+userSchema.methods.generateVerificationToken = async function () {
+    return jwt.sign({ _id: this._id, email: this.email }, process.env.VERIFICATION_TOKEN_SECRET, { expiresIn: process.env.VERIFICATION_TOKEN_EXPIRY })
 }
 
 export const User = mongoose.model("User", userSchema);
