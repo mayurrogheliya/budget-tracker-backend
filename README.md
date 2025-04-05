@@ -34,3 +34,8 @@ This is the backend repository for the Budget Tracker App. It handles user authe
    ```bash
    npm start
    ```
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
+
