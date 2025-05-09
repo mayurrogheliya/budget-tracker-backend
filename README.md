@@ -3,6 +3,10 @@
 ## Overview
 This is the backend repository for the Budget Tracker App. It handles user authentication, transaction management, and data storage. The backend is designed to interact seamlessly with the frontend through a RESTful API.
 
+## Frontend Repository
+You can find the frontend code for this project here:  
+🔗 [Budget Tracker - Frontend](https://github.com/mayurrogheliya/budget-tracker-frontend)
+
 ## Features
 - User authentication with JWT (login, register, and token refresh)
 - CRUD operations for transactions
